@@ -58,6 +58,7 @@ class Settings
     public function FRTWPSettingsFields()
     {
         $fields = [
+            'weather_condition' => __('Weather condition icon', 'frt-weather-plugin'),
             'temperature' => __('Temperature', 'frt-weather-plugin'),
             'temperature_scale' => __('Temperature scale', 'frt-weather-plugin'),
             'pressure' => __('Pressure', 'frt-weather-plugin'),
@@ -107,7 +108,8 @@ class Settings
         <?php
     }
 
-    public function FRTWPTemperatureUnitFieldCallback($args) {
+    public function FRTWPTemperatureUnitFieldCallback($args)
+    {
         $options = get_option('frtwp_options');
         ?>
         <select

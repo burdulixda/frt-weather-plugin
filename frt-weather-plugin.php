@@ -14,5 +14,7 @@
  */
 
 include(plugin_dir_path(__FILE__) . 'includes/frt-weather-settings.php');
+include(plugin_dir_path(__FILE__) . 'includes/frt-weather-widget.php');
 
 $settings = new \FRTWP\Settings;
+$widget = new \FRTWP\Widget;
