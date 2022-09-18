@@ -16,6 +16,7 @@ class Widget extends \WP_Widget
         
         add_action('wp_enqueue_scripts', array($this, 'FRTWPEnqueueScript'));
         add_action('wp_ajax_FRTWPGetUserCoordinates', array($this, 'FRTWPGetUserCoordinates'));
+        add_action('wp_ajax_nopriv_FRTWPGetUserCoordinates', array($this, 'FRTWPGetUserCoordinates'));
     }
 
     public function widget($args, $instance)
