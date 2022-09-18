@@ -66,7 +66,13 @@ class Widget extends \WP_Widget
             <p>Weather: <?php echo $res->weather[0]->main; ?></p>
 
             <?php if (isset($options['frtwp_temperature_field'])) : ?>
-                <p>Temperature: <?php echo $res->main->temp . $options['frtwp_temperature_unit_field']; ?></p>
+                <p>Temperature: <?php echo $res->main->temp; ?>
+                    <?php if (isset($options['frtwp_temperature_scale_field'])) : ?>
+                        <span>
+                            <?php echo $options['frtwp_temperature_unit_field']; ?>
+                        </span>
+                    <?php endif; ?>
+                </p>
             <?php endif; ?>
 
             <?php if (isset($options['frtwp_pressure_field'])) : ?>
