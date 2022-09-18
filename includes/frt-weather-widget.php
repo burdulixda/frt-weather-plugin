@@ -13,15 +13,22 @@ class Widget extends \WP_Widget
         add_action('widgets_init', function () {
             register_widget('\FRTWP\Widget');
         });
+        
+        add_action('wp_enqueue_scripts', array($this, 'FRTWPEnqueueScript'));
+        add_action('wp_ajax_FRTWPGetUserCoordinates', array($this, 'FRTWPGetUserCoordinates'));
     }
 
     public function widget($args, $instance)
     {
         $options = get_option('frtwp_options');
         $units = $options['frtwp_temperature_unit_field'] === 'C' ? 'metric' : 'imperial';
+        
+        $latitude = isset($_COOKIE['user_latitude']) ? $_COOKIE['user_latitude'] : '';
+        $longitude = isset($_COOKIE['user_longitude']) ? $_COOKIE['user_longitude'] : '';
 
         $response = wp_remote_get(
-            'https://api.openweathermap.org/data/2.5/weather?lat=41.715137&lon=44.827095&appid='
+            'https://api.openweathermap.org/data/2.5/weather?lat='
+            . $latitude . '&lon=' . $longitude . '&appid='
             . $options['frtwp_api_key_field'] . '&units=' . $units
         );
 
@@ -110,6 +117,9 @@ class Widget extends \WP_Widget
         : __('Widget border radius', 'frt-weather-plugin');
         ?>
         <p>
+            <?php _e('Configure widget styling. All inputs allow standard CSS values.') ?>
+        </p>
+        <p>
             <label for="<?php echo $this->get_field_name('backgroundColor'); ?>">
                 <?php _e('Background color', 'frt-weather-plugin'); ?>
             </label>
@@ -151,5 +161,31 @@ class Widget extends \WP_Widget
                 value="<?php echo esc_attr($borderRadius); ?>" />
         </p>
         <?php
+    }
+
+    public function FRTWPEnqueueScript()
+    {
+        wp_enqueue_script('frtwp-script', plugin_dir_url(__FILE__) . '/script.js', array('jquery'));
+        wp_localize_script(
+            'frtwp-script',
+            'frtwp_ajax_object',
+            array(
+                'ajaxurl' => admin_url('admin-ajax.php')
+            )
+        );
+    }
+
+    public function FRTWPGetUserCoordinates()
+    {
+        if (isset($_REQUEST)) {
+            $coordinates = $_REQUEST['coordinates'];
+            $latitude = $coordinates['latitude'];
+            $longitude = $coordinates['longitude'];
+
+            setcookie('user_latitude', $latitude, time() + (86400 * 30), "/");
+            setcookie('user_longitude', $longitude, time() + (86400 * 30), "/");
+        }
+
+        wp_die();
     }
 }
