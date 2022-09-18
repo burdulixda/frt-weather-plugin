@@ -40,16 +40,20 @@ class Widget extends \WP_Widget
             <div>
                 <img
                 src="<?php echo 'https://openweathermap.org/img/wn/' . $res->weather[0]->icon . '@2x.png' ?>"
-                alt="<?php echo $description = $res->weather[0]->description; ?>">
+                alt="<?php echo $res->weather[0]->description; ?>">
             </div>
             <?php endif; ?>
 
+            <p>Location: <?php echo $res->name . ', ' . $res->sys->country; ?></p>
+
+            <p>Weather: <?php echo $res->weather[0]->main; ?></p>
+
             <?php if (isset($options['frtwp_temperature_field'])) : ?>
-                <p>Temperature: <?php echo $temp = $res->main->temp . $options['frtwp_temperature_unit_field']; ?></p>
+                <p>Temperature: <?php echo $res->main->temp . $options['frtwp_temperature_unit_field']; ?></p>
             <?php endif; ?>
 
             <?php if (isset($options['frtwp_pressure_field'])) : ?>
-                <p>Pressure: <?php echo $pressure = $res->main->pressure; ?></p>
+                <p>Pressure: <?php echo $res->main->pressure; ?></p>
             <?php endif; ?>
             
             <?php if (isset($options['frtwp_wind_field'])) : ?>
